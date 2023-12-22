@@ -1,0 +1,46 @@
+<div id="list">
+	<div class="container">
+		<div class="row d-flex justify-content-between">
+			<div class="col-md-12">
+				<div class="input-group">
+					<input type="text" class="form-control search" name="search" placeholder="Search..." aria-label="Search..." aria-describedby="search">
+					<button class="btn btn-outline-secondary" type="button" id="search"><i class="fas fa-search"></i></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="mt-3">
+				<ul class="list list-inline">
+					<repeat group="{{@list_item}}" value="{{@item}}">
+						<li class="d-flex justify-content-between shadow">
+							<div class="d-flex flex-row align-items-center">
+								<div class="ml-2">
+									<h6 class="mb-0"><a href="{{@siteurl}}/tag/{{@item}}" class="link-custom"><span class="name">{{@item}}</span></a></h6>
+								</div>
+							</div>
+						</li>
+					</repeat>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="pagination d-flex justify-content-center"></div>
+</div>
+
+<script>
+	var table = new List('list', {
+		valueNames: ['name'],
+		page: 20,
+		pagination: [{
+			innerWindow: 3,
+			outerWindow: 2,
+			item: "<li class='page-item'><a class='page page-link' href='#'></a></li>"
+		}]
+	});
+	table.sort('name', {
+		order: 'desc'
+	});
+</script>

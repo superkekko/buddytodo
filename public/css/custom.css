@@ -1,0 +1,61 @@
+body {
+	min-height: 75rem;
+	padding-top: 4.5rem;
+	background-color: #E5E5E5;
+	color: #000;
+}
+
+.navbar-dark .navbar-nav .nav-link:focus,
+.navbar-dark .navbar-nav .nav-link:hover,
+.custom-link:focus,
+.custom-link:hover {
+	color: #20469d;
+	text-decoration: none;
+}
+
+.navbar-dark .navbar-nav .nav-link,
+.custom-link {
+	color: #fff;
+	text-decoration: none;
+}
+
+.btn-custom:hover {
+	color: #20469d;
+}
+
+.list-group li {
+	margin-bottom: 12px;
+}
+
+.list li {
+	list-style: none;
+	padding: 10px;
+	border: 1px solid #fff;
+	margin-top: 12px;
+	border-radius: 5px;
+	background: #fff;
+}
+
+.link-custom {
+	color: #000;
+	text-decoration: none;
+}
+
+.link-custom:focus,
+.link-yecustomllow:hover {
+	color: #20469d;
+	text-decoration: none;
+}
+
+.page-item.active .page-link {
+	background-color: #212529;
+	border-color: #212529;
+}
+
+.page-item .page-link {
+	color: #212529;
+}
+
+.bg-custom {
+	background-color: #20469d;
+}

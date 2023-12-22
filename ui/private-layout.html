@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="{{@html_lang}}">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>{{@site['title']}}</title>
+
+	<!-- pwa and navigation -->
+	<link rel="icon" sizes="any" type="image/png" href="/img/logo-512.png">
+	<link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+	<link rel="mask-icon" href="/img/logo.png" color="#E5E5E5">
+	<link rel="apple-touch-icon" href="/img/logo-180.png">
+	<meta name="theme-color" content="#E5E5E5">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<link rel="manifest" href="/app.webmanifest">
+	<link rel="apple-touch-startup-image" media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" href="/img/splash_screens/12.9__iPad_Pro_landscape.png">
+	<link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/img/splash_screens/10.5__iPad_Air_portrait.png">
+	<link rel="apple-touch-startup-image" media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/img/splash_screens/11__iPad_Pro__10.5__iPad_Pro_portrait.png">
+	<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/img/splash_screens/iPhone_11__iPhone_XR_portrait.png">
+	<link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/img/splash_screens/iPhone_11_Pro_Max__iPhone_XS_Max_portrait.png">
+	<link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/img/splash_screens/iPhone_13_mini__iPhone_12_mini__iPhone_11_Pro__iPhone_XS__iPhone_X_portrait.png">
+	<link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/img/splash_screens/iPhone_14__iPhone_13_Pro__iPhone_13__iPhone_12_Pro__iPhone_12_portrait.png">
+	<link rel="apple-touch-startup-image" media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/img/splash_screens/iPhone_15_Pro_Max__iPhone_15_Plus__iPhone_14_Pro_Max_portrait.png">
+	<link rel="apple-touch-startup-image" media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/img/splash_screens/iPhone_15_Pro__iPhone_15__iPhone_14_Pro_portrait.png">
+
+	<!-- icon -->
+	<link rel="icon" sizes="any" type="image/png" href="/img/logo.png">
+	<link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+	<!-- Font Awesome Icons -->
+	<link rel="stylesheet" href="/css/font-awesome/css/all.min.css">
+	<!-- jquery-ui -->
+	<link rel="stylesheet" href="/js/jquery-ui/jquery-ui.min.css">
+	<!-- list.js -->
+	<link rel="stylesheet" href="/js/list.js/list.css">
+	<!-- Select2 -->
+	<link rel="stylesheet" href="/js/select2/css/select2.min.css">
+	<link rel="stylesheet" href="/js/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+	<!-- Custom -->
+	<link rel="stylesheet" href="/css/custom.css?3" rel="stylesheet">
+</head>
+
+<!-- REQUIRED SCRIPTS -->
+<!-- jQuery -->
+<script src="/js/jquery/jquery.min.js"></script>
+<!-- jquery-ui -->
+<script src="/js/jquery-ui/jquery-ui.min.js"></script>
+<!-- Bootstrap -->
+<script src="/js/bootstrap/bootstrap.bundle.min.js"></script>
+<!-- List.js -->
+<script src="/js/list.js/list.min.js"></script>
+<!-- Select2 -->
+<script src="/js/select2/js/select2.min.js"></script>
+<!-- Custom -->
+<script src="/js/function.js"></script>
+
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" style="background-color: #000; color: #fff">
+		<div class="container-fluid mx-5">
+			<a class="navbar-brand" href="{{@site_url}}"><img src="/img/logo.png" alt="buddylink logo" width="30"> {{@site['title']}}</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<ul class="navbar-nav me-auto mb-2 mb-md-0">
+					<li class="nav-item">
+						<a class="nav-link" href="/tag">Tags</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/list">List</a>
+					</li>
+				</ul>
+				<div class="dropdown">
+					<a class="custom-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+						{{@active_user['user_id']}}
+					</a>
+
+					<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+						<li><a class="dropdown-item" href="/settings">Settings</a></li>
+						<li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
+						<check if="{{@active_user['superadmin'] == 1}}">
+							<true>
+								<li><a class="dropdown-item text-warning" href="/supersettings">Super settings</a></li>
+							</true>
+						</check>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	<main class="container">
+		<div class="row">
+			<div class="col-12">
+				<include href="{{@content}}" />
+			</div>
+		</div>
+	</main>
+
+</body>
+
+</html>
+
+<script>
+	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+	var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+		return new bootstrap.Tooltip(tooltipTriggerEl)
+	})
+</script>

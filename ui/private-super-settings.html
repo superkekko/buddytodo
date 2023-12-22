@@ -1,0 +1,181 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+	<h1 class="h2">Super settings</h1>
+	<div class="btn-toolbar mb-2 mb-md-0">
+	</div>
+</div>
+
+<div class="row mb-2">
+	<div class="col-4">
+		Active session: {{@active_session}}
+	</div>
+</div>
+
+<div class="row mb-2">
+	<div class="col-4">
+		<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#end-session" id="edit">End all sessions</button>
+	</div>
+</div>
+
+<!-- end session -->
+<div class="modal fade" id="end-session" style="display: none;" aria-hidden="true" data-keyboard="false" data-bs-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				Confirm ending sessions. All the opened session (including this) will be terminated!
+			</div>
+			<form action="{{ @URI }}" method="post" enctype="application/x-www-form-urlencoded">
+				<input type="hidden" name="task" id="task" value="end-session">
+				<div class="d-flex justify-content-between pb-3 px-3">
+					<button type="button" class="btn btn-secondary btn-sm" id="delete-close" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-danger btn-sm">Confirm</button>
+				</div>
+			</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<div class="row">
+	<div class="col-12 d-flex justify-content-end">
+		<button type="button" class="btn btn-tool" data-bs-toggle="modal" data-bs-target="#user-modal-edit"><i class="fa-regular fa-square-plus"></i></button>
+	</div>
+	<check if='{{ @GET.status == "same-userid"}}'>
+		<true>
+			<div style="text-align: right;" class="text-danger">User not created: duplicated user_id</div>
+		</true>
+	</check>
+
+</div>
+
+<div class="row row-cols-4">
+	<repeat group="{{@users}}" value="{{@item}}">
+		<div class="card m-1 rounded-3 shadow-sm" style="width: 18rem;">
+			<div class="card-body">
+				<div class="row px-2 d-flex align-items-center justify-content-between">
+					<div class="col-8">
+						<h6 class="card-title">{{@item['user_id']}}</h6>
+					</div>
+					<div class="col-4">
+						<div class="row">
+							<div class="col-1"><button type="button" class="btn btn-tool" data-bs-toggle="modal" data-bs-target="#user-modal-edit" id="user-edit" data-id="{{@item['id']}}" data-user="{{@item['user_id']}}" data-group="{{@item['group_id']}}" data-superadmin="{{@item['superadmin']}}"><i class="fa-solid fa-pen-to-square"></i></button></div>
+							<div class="col-1"><button type="button" class="btn btn-tool" data-bs-toggle="modal" data-bs-target="#user-modal-delete" id="user-delete" data-id="{{@item['id']}}" data-user="{{@item['user_id']}}"><i class="fa-regular fa-trash-can"></i></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</repeat>
+</div>
+
+<script>
+	$(document).on("click", "#user-edit", function() {
+		document.getElementById('user-id').setAttribute("value", $(this).data('id'));
+		document.getElementById('user-user').setAttribute("value", $(this).data('user'));
+		document.getElementById('user-user').setAttribute("readonly", "readonly");
+		document.getElementById('user-password').removeAttribute("required", "required");
+		document.getElementById('user-group').setAttribute("value", $(this).data('group'));
+		if ($(this).data('superadmin') == 1) {
+			document.getElementById('user-superadmin').setAttribute("checked", "checked");
+		}
+	});
+
+	$(document).on("click", "#user-close", function() {
+		document.getElementById("edit-user").reset();
+		document.getElementById('user-id').setAttribute("value", 0);
+		document.getElementById('user-user').setAttribute("value", "");
+		document.getElementById('user-user').removeAttribute("readonly", "readonly");
+		document.getElementById('user-password').setAttribute("value", "");
+		document.getElementById('user-password').setAttribute("required", "required");
+		document.getElementById('user-group').setAttribute("value", "");
+		document.getElementById('user-superadmin').removeAttribute("checked", "checked");
+		document.getElementById('edit-user').classList.remove("was-validated");
+	});
+
+	$(document).on("click", "#user-delete", function() {
+		document.getElementById('delete-id').setAttribute("value", $(this).data('id'));
+		document.getElementById('delete-data').innerHTML = "Confirm user " + $(this).data('user') + " deletion";
+	});
+</script>
+
+<!-- delete modal -->
+<div class="modal fade" id="user-modal-delete" style="display: none;" aria-hidden="true" data-keyboard="false" data-bs-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body" id="delete-data"></div>
+			<form action="{{ @URI }}" method="post" enctype="application/x-www-form-urlencoded">
+				<input type="hidden" name="delete-id" id="delete-id" value="">
+				<input type="hidden" name="task" id="task" value="delete">
+				<div class="d-flex justify-content-between pb-3 px-3">
+					<button type="button" class="btn btn-secondary btn-sm" id="delete-close" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-danger btn-sm">Confirm</button>
+				</div>
+			</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<!-- modal user password -->
+<div class="modal fade" id="user-modal-edit" style="display: none;" aria-hidden="true" data-keyboard="false" data-bs-backdrop="static">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<form action="{{ @URI }}" method="post" id="edit-user" enctype="application/x-www-form-urlencoded" novalidate>
+				<div class="modal-body">
+					<div class="row mb-1">
+						<div class="col-4">
+							<input type="text" name="user-user" id="user-user" class="form-control" placeholder="User ID" value="" required>
+						</div>
+						<div class="col-4">
+							<input type="text" name="user-group" id="user-group" class="form-control" placeholder="Group ID" value="">
+						</div>
+						<div class="col-4">
+							<input type="password" name="user-password" id="user-password" placeholder="New password" value="" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).(?=.*[0-9]).{8,20}" required>
+							<div class="invalid-feedback">
+								Please provide a valid password (must be 8 char minimum, at least 1 uppercase, 1 lowercase and 1 number)
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12 d-flex justify-content-end">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="user-superadmin" id="user-superadmin" value="1">
+								<label class="form-check-label">
+									Superadmin
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" name="user-id" id="user-id" value="0">
+				<input type="hidden" name="task" id="task" value="edit">
+				<div class="d-flex justify-content-between pb-3 px-3">
+					<button type="button" id="user-close" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-success btn-sm">Confirm</button>
+				</div>
+			</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<script>
+	//password check
+	let isPasswordValid = false;
+	const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).(?=.*[0-9]).{8,20}/;
+	const form = document.getElementById('edit-user');
+
+	form.addEventListener('submit', function(event) {
+		const formData = new FormData(form);
+		isPasswordValid = passwordPattern.test(formData.get('user-password'));
+		
+		// If either the form is invalid or the passwords don't match, stop!
+		if (form.checkValidity() === false || !isPasswordValid) {
+			event.preventDefault();
+			event.stopPropagation();
+		}
+		form.classList.add('was-validated');
+	});
+</script>

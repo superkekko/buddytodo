@@ -1,0 +1,20 @@
+Options -Indexes +FollowSymLinks +Includes
+
+RewriteEngine On
+
+RewriteRule ^(app|dict|ns|tmp)\/|\.ini$ - [R=404]
+
+RewriteCond $0 !=img/favicon.ico
+RewriteRule ^([^/]+/)*favicon\.ico$ img/favicon.ico [L]
+
+RewriteCond $0 !=app.webmanifest
+RewriteRule ^([^/]+/)*app\.webmanifest$ app.webmanifest [L]
+
+RewriteCond $0 !=img/logo.png
+RewriteRule ^([^/]+/)*logo\.png$ img/logo.png [L]
+
+RewriteCond %{REQUEST_FILENAME} !-l
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* index.php [L,QSA]
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]

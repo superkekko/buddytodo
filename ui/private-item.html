@@ -1,0 +1,228 @@
+<div id="list">
+	<div class="container">
+		<div class="row">
+			<form action="{{ @URI }}" method="post" enctype="application/x-www-form-urlencoded">
+				<div class="row mb-2">
+					<div class="col-12">
+						<input type="text" name="name" id="edit-name" class="form-control" placeholder="Name" value="">
+					</div>
+				</div>
+				<div class="row mb-2">
+					<div class="col-md-4">
+						<select name="tags[]" multiple id="edit-tags" placeholder="Tags" class="form-control" style="width: 100%;">
+							<option value=""></option>
+							<repeat group="{{@tags}}" value="{{@item}}">
+								<option>{{ @item }}</option>
+							</repeat>
+						</select>
+					</div>
+					<div class="col-md-4">
+						<select name="list" placeholder="List" id="edit-list" class="form-control">
+							<option value=""></option>
+							<repeat group="{{@list}}" value="{{@item}}">
+								<option>{{@item}}</option>
+							</repeat>
+						</select>
+					</div>
+					<div class="col-md-4">
+						<input type="date" name="due-date" id="edit-date" class="form-control" placeholder="Due date" value="">
+					</div>
+				</div>
+				<input type="hidden" name="task" id="task" value="edit">
+				<input type="hidden" name="id" id="edit-id" value="0">
+				<div class="d-flex justify-content-end pb-3">
+					<button type="submit" class="btn btn-success btn-sm">Save</button>
+					<button type="button" class="btn btn-sm btn-tool" id="edit-clear"><i class="fa-solid fa-broom"></i> Clear</button>
+				</div>
+			</form>
+		</div>
+		<div class="row">
+			<div class="col-md-12 d-flex justify-content-end">
+				<div class="input-group">
+					<input type="text" class="form-control search" name="search" placeholder="Search..." aria-label="Search..." aria-describedby="search">
+					<button class="btn btn-outline-secondary" type="button" id="search"><i class="fas fa-search"></i></button>
+				</div>
+				<button type="submit" id="closed" class="btn btn-tool"><i class="fas fa-eye-slash"></i></button>
+				<form id="uploadform" action="{{ @URI }}" method="post" enctype="multipart/form-data">
+					<input type="hidden" name="task" value="add-file">
+					<input type="file" name="upload" id="upload" hidden><label class="btn btn-tool" for="upload"><i class="fas fa-plus"></i></label>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="mt-3">
+			<ul class="list list-inline">
+				<repeat group="{{@task}}" value="{{@item}}">
+					<li data-id="{{ @item['id'] }}" class="shadow">
+						<div class="row ml-2 text-truncate">
+							<h5 class="mb-0">
+								<form id="completeform" action="{{ @URI }}" method="post" enctype="application/x-www-form-urlencoded">
+									<input type="hidden" name="task" value="<check if=" {{!empty(@item['comp_date'])}}">
+									<true>uncomplete</true>
+									<false>complete</false>
+									</check>">
+									<input type="hidden" name="id" value="{{@item['id']}}">
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" value="" id="ckeck-complete" <check if="{{!empty(@item['comp_date'])}}">
+										<true>checked</true>
+										</check>
+										<label class="form-check-label">
+											<span class="name" <check if="{{empty(@item['comp_date']) && !empty(@item['due_date']) && strtotime(@item['due_date']) < time()}}">
+												<true>style="color:#dc3545"</true>
+												</check>>{{@item['name']}}
+											</span>
+										</label>
+								</form>
+							</h5>
+							<div class="row mt-1 d-flex justify-content-between">
+								<div class="col">
+									<a href="/list/{{@item['list']}}" class="lista link-custom">{{@item['list']}}</a>&emsp;
+									<span class="tags">
+										<repeat group="{{explode(',', @item['tags'])}}" value="{{@subitem}}">
+											<a href="/tag/{{@subitem}}"><span class="badge rounded-pill bg-custom">{{@subitem}}</span></a>
+										</repeat>
+									</span>&emsp;
+									<span class="time_ins" data-timestamp="{{ date('YmdHi',strtotime(@item['time_ins'])) }}"><i class="fa-regular fa-calendar-plus"></i> {{ @formatDate(@item['time_ins'], '', true) }}</span>&emsp;
+									<span class="due-date" data-timestamp="<check if="{{empty(@item['due_date'])}}"><true>99991231</true><false>{{ date('Ymd',strtotime(@item['due_date'])) }}</false></check>"><i class="fa-regular fa-bell"></i> {{ @formatDate(@item['due_date'], 'N/A') }}</span>&emsp;
+									<span class="comp-date" data-timestamp="{{ date('YmdHi',strtotime(@item['comp_date'])) }}"><i class="fa-regular fa-calendar-check"></i> {{ @formatDate(@item['comp_date'], 'N/A', true) }}</span>&emsp;
+									<span class="work-hours"><i class="fa-solid fa-hourglass"></i> {{@formatTime(@item['work_seconds'])}}</span>
+								</div>
+								<div class="col  d-flex justify-content-end">
+									<check if="{{ @item['open_count'] == 0}}">
+										<true>
+											<form action="{{ @URI }}" method="post" id="count" enctype="application/x-www-form-urlencoded">
+												<input type="hidden" name="task" value="start-count">
+												<input type="hidden" name="id" value="{{@item['id']}}">
+												<button type="submit" class="btn btn-sm btn-tool"><i class="fa-solid fa-stopwatch"></i> Start Count</button>
+											</form>
+										</true>
+										<false>
+											<form action="{{ @URI }}" method="post" id="count" enctype="application/x-www-form-urlencoded">
+												<input type="hidden" name="task" value="end-count">
+												<input type="hidden" name="id" value="{{@item['id']}}">
+												<button type="submit" class="btn btn-sm btn-tool text-danger"><i class="fa-solid fa-stopwatch"></i> End Count</button>
+											</form>
+										</false>
+									</check>
+									<button type="button" class="btn btn-sm btn-tool" id="edit-data" data-id="{{@item['id']}}" data-name="{{@item['name']}}" data-link="{{@item['link']}}" data-tags="{{@item['tags']}}" data-list="{{@item['list']}}" data-date="{{@item['due_date']}}"><i class="fa-solid fa-pen-to-square"></i> Edit</button>&emsp;
+									<form action="{{ @URI }}" method="post" enctype="application/x-www-form-urlencoded">
+										<input type="hidden" name="task" value="delete">
+										<input type="hidden" name="id" value="{{@item['id']}}">
+										<button type="submit" class="btn btn-sm btn-tool text-danger"><i class="fa-solid fa-trash-can"></i> Delete</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</li>
+				</repeat>
+			</ul>
+		</div>
+	</div>
+	<ul class="pagination d-flex justify-content-center"></ul>
+</div>
+
+<script>
+	$(document).on("click", "#ckeck-complete", function() {
+		document.getElementById("completeform").submit();
+	});
+
+	$(document).on("click", "#count", function() {
+		document.getElementById("completeform").submit();
+	});
+	
+	document.getElementById("upload").onchange = function() {
+	    document.getElementById("uploadform").submit();
+	}
+</script>
+
+<script>
+	$(document).on("click", "#edit-data", function() {
+		document.getElementById('edit-id').setAttribute("value", $(this).data('id'));
+		document.getElementById('edit-name').setAttribute("value", $(this).data('name'));
+		$('#edit-list').val($(this).data('list')).trigger('change');
+		tags = $(this).data('tags');
+		$('#edit-tags').val(tags.split(",")).trigger('change');
+		document.getElementById('edit-date').setAttribute("value", $(this).data('date'));
+	});
+
+	$(document).on("click", "#edit-clear", function() {
+		document.getElementById('edit-id').setAttribute("value", 0);
+		document.getElementById('edit-name').setAttribute("value", "");
+		$('#edit-list').val(null).trigger('change');
+		$('#edit-tags').val(null).trigger('change');
+		document.getElementById('edit-date').setAttribute("value", '');
+	});
+</script>
+
+<script>
+	$('#edit-tags').select2({
+		theme: 'bootstrap4',
+		placeholder: "Tags",
+		tags: true,
+		allowClear: true
+	});
+
+	$('#edit-list').select2({
+		theme: 'bootstrap4',
+		placeholder: "List",
+		tags: true,
+		allowClear: true
+	});
+</script>
+
+<script>
+	var table = new List('list', {
+		valueNames: ['name', 'list', 'tags', {
+			name: 'time-ins',
+			attr: 'data-timestamp'
+		}, {
+			name: 'due-date',
+			attr: 'data-timestamp'
+		}, {
+			name: 'comp-date',
+			attr: 'data-timestamp'
+		}],
+		page: 10,
+		pagination: [{
+			innerWindow: 3,
+			outerWindow: 2,
+			item: "<li class='page-item'><a class='page page-link' href='#'></a></li>"
+		}]
+	});
+
+	table.filter(function(item) {
+		if (item.values()['comp-date'] == '197001010100') {
+			return true;
+		} else {
+			return false;
+		}
+	});
+
+	table.sort('due-date', {
+		order: 'asc'
+	});
+</script>
+
+<script>
+	document.getElementById('closed').onclick = function() {
+		item = document.getElementById('closed');
+		innerItem = item.childNodes[0];
+		if (innerItem.className == 'fas fa-eye-slash') {
+			table.filter();
+			innerItem.classList.remove('fa-eye-slash');
+			innerItem.classList.add('fa-eye');
+		} else {
+			table.filter(function(item) {
+				if (item.values()['comp-date'] == '197001010100') {
+					return true;
+				} else {
+					return false;
+				}
+			});
+			innerItem.classList.remove('fa-eye');
+			innerItem.classList.add('fa-eye-slash');
+		}
+	};
+</script>

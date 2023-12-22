@@ -1,0 +1,55 @@
+{
+    "theme_color": "#E5E5E5",
+    "background_color": "#E5E5E5",
+    "display": "fullscreen",
+    "orientation": "any",
+    "lang" : "en",
+    "scope": "/",
+    "start_url": "/",
+    "name": "BuddyToDo",
+    "short_name": "BuddyToDo",
+    "description": "simple personal/shared task/to do list",
+    "version": "1.9.0",
+    "msapplication-TileImage": "img/logo.png",
+    "msapplication-TileColor": "#E5E5E5",
+    "share_target": {
+	  "action": "/link-add",
+	  "params": {
+		"title": "title",
+		"text": "text",
+		"url": "url"
+	  }
+	},
+    "icons": [
+    	{
+    		"src": "img/logo-48.png",
+    		"type": "image/png",
+        	"sizes": "48x48"
+    	},
+    	{
+    		"src": "img/logo-72.png",
+    		"type": "image/png",
+        	"sizes": "72x72"
+    	},
+    	{
+    		"src": "img/logo-96.png",
+    		"type": "image/png",
+        	"sizes": "96x96"
+    	},
+    	{
+    		"src": "img/logo-128.png",
+    		"type": "image/png",
+        	"sizes": "128x128"
+    	},
+    	{
+    		"src": "img/logo-144.png",
+    		"type": "image/png",
+        	"sizes": "144x144"
+    	},
+    	{
+    		"src": "img/logo-512.png",
+    		"type": "image/png",
+        	"sizes": "512x512"
+    	}
+    ]
+}

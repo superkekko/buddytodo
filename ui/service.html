@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="{{@html_lang}}">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>{{@title}}</title>
+
+	<!-- icon -->
+	<link rel="icon" sizes="any" type="image/png" href="/img/logo.png">
+	<link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+	<!-- Font Awesome Icons -->
+	<link rel="stylesheet" href="/css/font-awesome/css/all.min.css">
+	<!-- Custom -->
+	<link rel="stylesheet" href="/css/login.css?1" rel="stylesheet">
+</head>
+
+<body>
+	<div class="row d-flex justify-content-center align-items-center" style="width: 100vw">
+		<div class="col-3 text-center">
+			<h1 class="display-1 fw-bold">{{@ERROR.code}}</h1>
+			<p class="fs-3"> <span class="text-danger">Opps!</span> {{@ERROR.status}}.</p>
+		</div>
+	</div>
+</body>
+
+</html>
