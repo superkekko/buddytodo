@@ -72,22 +72,3 @@
 </body>
 
 </html>
-
-<script>
-	function registerServiceWorker() {
-		if ('serviceWorker' in navigator) {
-			navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-				console.log('Service worker registration succeeded:', registration);
-				return true;
-			}, function(error) {
-				console.log('Service worker registration failed:', error);
-				return false;
-			});
-		} else {
-			console.log('Service workers are not supported.');
-			return false;
-		}
-	}
-
-	registerServiceWorker();
-</script>

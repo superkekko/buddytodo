@@ -60,6 +60,8 @@
 <script src="/js/tippyjs/tippy-bundle.umd.min.js"></script>
 <!-- Custom -->
 <script src="/js/function.js"></script>
+<!-- pwa notification -->
+<script src="/js/pwa-function.js"></script>
 
 <body>
 	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" style="background-color: #000; color: #fff">
@@ -103,8 +105,8 @@
 			</div>
 		</div>
 	</main>
-	
-	
+
+
 
 </body>
 
@@ -115,4 +117,57 @@
 	var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
 		return new bootstrap.Tooltip(tooltipTriggerEl)
 	})
+</script>
+
+<!-- Modal for pwa installation for ios-->
+<div class="modal fade" id="ios-pwa-install" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body">
+				<i class="fa-solid fa-mobile-screen-button"></i> Install this webapp on your device: click on the share button and add to homescreen.
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<script>
+	if (mobileType() == 'ios' && !pwaInstalled() && typeof getCookie('pwa-popup-ios') === 'undefined') {
+		$('#ios-pwa-install').modal('show');
+		setCookie('pwa-popup-ios', true, {
+			expires: 1,
+			domain: '{{@HOST}}',
+			Secure: true,
+			'max-age': 86400,
+			SameSite: 'lax'
+		})
+	}
+</script>
+
+<!-- Modal for notification button ios-->
+<div class="modal fade" id="push-notification" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body">
+				<i class="fa-solid fa-bell"></i> Do you want to receive push notifications in real time?<br>
+			</div>
+			<div class="d-flex justify-content-between pb-3 px-3">
+				<button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
+					No
+				</button>
+				<button type="button" class="btn btn-primary" onclick="requestNotificationPermission()">
+					Yes
+				</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<script>
+	//gestisco web notification
+	registerServiceWorker();
+	notification();
 </script>
