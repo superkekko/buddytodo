@@ -52,6 +52,14 @@
 
 		<div class="card shadow-lg">
 			<div class="card-body">
+				<check if="{{ @login_error }}">
+					<true>
+						<div class="alert alert-danger">
+							<i class="icon fas fa-ban"></i> Error during login
+						</div>
+					</true>
+				</check>
+				
 				<form action="{{ @URI }}" method="post" enctype="application/x-www-form-urlencoded">
 					<div class="form-group mb-2">
 						<label>{{@username}}</label>
