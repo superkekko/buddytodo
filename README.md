@@ -29,3 +29,4 @@ task_name|task_tags|task_list|task_due_date
 - jQuery UI 1.13.1 (https://jqueryui.com/)
 - List.js 2.3.1 (https://listjs.com/)
 - Select2 4.0.13 (https://select2.org/)
+- TippyJs 6.3.7 (https://atomiks.github.io/tippyjs/)

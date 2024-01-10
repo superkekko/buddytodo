@@ -3,10 +3,10 @@ class authentication extends controller {
 
 	function loginpage($f3) {
 		//create new session with 15gg live cookie, rootpath, server, secure, httponly and samesite strict
-		session_set_cookie_params(1296000, '/', $_SERVER['HTTP_HOST'], false, true);
-		ini_set('session.cookie_samesite', 'Strict');
+		session_set_cookie_params(1296000, '/', $_SERVER['HTTP_HOST'], true, true);
+		ini_set('session.cookie_samesite', 'Lax');
 		$token = bin2hex(random_bytes(32));
-		if(empty($f3->get('SESSION.token'))){
+		if (empty($f3->get('SESSION.token'))) {
 			$f3->set('SESSION.token', $token);
 			$f3->set('token', $token);
 		}
@@ -45,7 +45,7 @@ class authentication extends controller {
 			}
 		} else {
 			$f3->set('login_error', true);
-			
+
 			$f3->clear('SESSION');
 			$f3->clear('COOKIE');
 			$this->loginpage($f3);
@@ -65,6 +65,10 @@ class authentication extends controller {
 
 		$f3->clear('SESSION');
 		$requestpage = $f3->get('COOKIE.requestpage');
+		//remove cookie from browser
+		foreach(array_keys($_COOKIE) as $key){
+			setcookie($key, '', time() - 3600); // empty value and old timestamp
+		}
 		$f3->clear('COOKIE');
 		$f3->set('COOKIE.requestpage', $requestpage, 1296000);
 
@@ -74,6 +78,7 @@ class authentication extends controller {
 	function checklogged($f3) {
 		$session_username = $f3->get('SESSION.username');
 		$session_token = $f3->get('SESSION.token');
+
 		$f3->set('COOKIE.requestpage', $f3->get('REALM'), 1296000);
 
 		$user_present = $f3->get('DB')->exec('SELECT * FROM user WHERE user_id=?', $session_username);
@@ -86,13 +91,13 @@ class authentication extends controller {
 			$f3->get('DB')->exec('UPDATE user_session SET token_expire = ? WHERE id=?', array($exipration_date, $user_data['id']));
 			$active_user = $f3->get('DB')->exec('SELECT * FROM user WHERE user_id=?', $session_username);
 			$f3->set('active_user', array('user_id' => $active_user[0]['user_id'], 'bearer' => $active_user[0]['bearer'], 'password' => $active_user[0]['password'], 'group_id' => $active_user[0]['group_id'], 'superadmin' => $active_user[0]['superadmin']));
-			
+
 			$f3->set('COOKIE.requestpage', $f3->get('REALM'), 1296000);
-			
+
 			return true;
 		} else {
 			$f3->set('COOKIE.requestpage', $f3->get('REALM'), 1296000);
-			
+
 			return false;
 		}
 	}
