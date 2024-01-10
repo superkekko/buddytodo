@@ -1,4 +1,4 @@
-# buddylink
+# buddytodo
 Buddytodo is a simple personal task/to do list/time traking manager self hosted
 
 ## Install and upgrade
