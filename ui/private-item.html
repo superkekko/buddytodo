@@ -87,7 +87,7 @@
 										</span>
 									</div>
 									<div class="col-md-8">
-										<span class="time_ins" data-timestamp="{{ date('YmdHi',strtotime(@item['time_ins'])) }}"><i class="fa-regular fa-calendar-plus"></i> {{ @formatDate(@item['time_ins'], '', true) }}</span>&emsp;
+										<span class="time-ins" data-timestamp="{{ date('YmdHi',strtotime(@item['time_ins'])) }}"><i class="fa-regular fa-calendar-plus"></i> {{ @formatDate(@item['time_ins'], '', true) }}</span>&emsp;
 										<span class="due-date" data-timestamp="<check if=" {{empty(@item['due_date'])}}">
 											<true>99991231</true>
 											<false>{{ date('Ymd',strtotime(@item['due_date'])) }}</false>
