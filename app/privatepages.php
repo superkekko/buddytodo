@@ -205,7 +205,11 @@ class privatepages extends authentication {
 						$task_name = $cells[0]->getValue();
 						$task_tags = $cells[1]->getValue();
 						$task_list = $cells[2]->getValue();
-						$task_due_date = $cells[3]->getValue();
+						if(!empty($cells[3])){
+							$task_due_date = $cells[3]->getValue();	
+						}else{
+							$task_due_date = '';
+						}
 						
 						$f3->get('DB')->exec("INSERT INTO task (name, tags, list, due_date, comp_date, user_ins, time_ins, user_upd, time_upd) VALUES (?,?,?,?,?,?,?,?,?)", array($task_name, $task_tags, $task_list, $task_due_date, '', $current_user['user_id'], date("Y-m-d H:i:s"), $current_user['user_id'], date("Y-m-d H:i:s")));
 					}

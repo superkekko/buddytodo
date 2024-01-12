@@ -30,3 +30,4 @@ task_name|task_tags|task_list|task_due_date
 - List.js 2.3.1 (https://listjs.com/)
 - Select2 4.0.13 (https://select2.org/)
 - TippyJs 6.3.7 (https://atomiks.github.io/tippyjs/)
+- Spout 3.3.0 (https://github.com/box/spout)
