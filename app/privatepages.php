@@ -65,7 +65,7 @@ class privatepages extends authentication {
 	function lists($f3) {
 		$current_user = $f3->get('active_user');
 
-		$results = $f3->get('DB')->exec("SELECT distinct list FROM task where user_upd = ?", $current_user['user_id']);
+		$results = $f3->get('DB')->exec("SELECT distinct list FROM task where user_upd = ? or (group_id = ? and share = ?)", array($current_user['user_id'], $current_user['group_id'], 1));
 		$alllist = [];
 		foreach ($results as $result) {
 			$alllist[] = $result['list'];
@@ -112,7 +112,7 @@ class privatepages extends authentication {
 	function tags($f3) {
 		$current_user = $f3->get('active_user');
 
-		$results = $f3->get('DB')->exec("SELECT distinct tags FROM task where user_upd = ?", $current_user['user_id']);
+		$results = $f3->get('DB')->exec("SELECT distinct tags FROM task where user_upd = ? or (group_id = ? and share = ?)", array($current_user['user_id'], $current_user['group_id'], 1));
 		$alltags = [];
 
 		foreach ($results as $result) {

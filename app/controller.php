@@ -78,12 +78,16 @@ class controller {
 
 			$db->exec("INSERT INTO user (user_id, superadmin, bearer, password) VALUES(?,?,?,?)", array('superadmin', 1, $this->generateRandomString(50), $this->encriptDecript($f3, 'superadmin')));
 
-			file_put_contents($main_path.'/data/db_version', '1.0.0', LOCK_EX);
+			file_put_contents($main_path.'/data/db_version', '1.0.1', LOCK_EX);
 		}
 
 		foreach (glob($main_path.'/setup/*') as $file) {
 			$file_name = basename($file, '.sql');
-			$actual_version = file_get_contents($main_path.'/data/db_version');
+			if(file_exists($main_path.'/data/db_version')){
+				$actual_version = file_get_contents($main_path.'/data/db_version');
+			}else{
+				$actual_version = '1.0.0';
+			}
 
 			if (version_compare($actual_version, $file_name, "<") && $file_name != 'install') {
 				$query = file_get_contents($file);
