@@ -2,3 +2,4 @@
 /tmp/*.php
 /data/*.db
 /data/*.json
+/data/db_version
