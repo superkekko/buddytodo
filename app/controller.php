@@ -7,7 +7,7 @@ class controller {
 
 		$main_path = dirname(__DIR__);
 		$f3->set('main_path', $main_path);
-		
+
 		require_once $main_path.'/plugin/spout/src/Spout/Autoloader/autoload.php';
 
 		$f3->set('LOCALES', $main_path.'/dict/');
@@ -24,15 +24,17 @@ class controller {
 		}
 
 		$f3->set('DB', new DB\SQL('sqlite:'.$main_path.'/data/database.db'));
-
+		$db = $f3->get('DB');
+		
 		//create DB structure if file not exist
 		if ($install) {
-			$db = $f3->get('DB');
 			$db->exec("CREATE TABLE task (
 			    id      	INTEGER PRIMARY KEY AUTOINCREMENT,
 			    name    	TEXT,
 			    tags    	TEXT,
 			    list    	TEXT,
+			    group_id	TEXT,
+			    share		INTEGER,
 			    due_date	TEXT,
 			    comp_date	TEXT,
 			    user_ins	TEXT,
@@ -75,6 +77,20 @@ class controller {
 			}
 
 			$db->exec("INSERT INTO user (user_id, superadmin, bearer, password) VALUES(?,?,?,?)", array('superadmin', 1, $this->generateRandomString(50), $this->encriptDecript($f3, 'superadmin')));
+
+			file_put_contents($main_path.'/data/db_version', '1.0.0', LOCK_EX);
+		}
+
+		foreach (glob($main_path.'/setup/*') as $file) {
+			$file_name = basename($file, '.sql');
+			$actual_version = file_get_contents($main_path.'/data/db_version');
+
+			if (version_compare($actual_version, $file_name, "<") && $file_name != 'install') {
+				$query = file_get_contents($file);
+				$query = explode(";", $query);
+				$db->exec($query);
+				file_put_contents($main_path.'/data/db_version', $file_name, LOCK_EX);
+			}
 		}
 
 		$f3->set('formatDate', function ($date, $empty = '', $time = false, $second = false) {
@@ -192,13 +208,13 @@ class controller {
 	}
 
 	function formatTime($seconds) {
-		if(!empty($seconds)){
+		if (!empty($seconds)) {
 			$dtF = new \DateTime('@0');
 			$dtT = new \DateTime("@$seconds");
-			return $dtF->diff($dtT)->format('%a d, %h h, %i m');	
-		}else{
+			return $dtF->diff($dtT)->format('%a d, %h h, %i m');
+		} else {
 			return 'N/A';
 		}
-	
+
 	}
 }

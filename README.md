@@ -18,7 +18,7 @@ the file must be in .xlsx format and the columns must be
 task_name|task_tags|task_list|task_due_date
 
 ## To do
-- [ ] manage sharing data between users of same group
+- [x] manage sharing data between users of same group
 - [ ] add statistic from items
 
 ## Modules

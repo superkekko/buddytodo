@@ -5,10 +5,10 @@ class privatepages extends authentication {
 		if (!$this->checklogged($f3)) {
 			$f3->reroute("/logout");
 		}
-
+		
 		$current_user = $f3->get('active_user');
-
-		$lists_raw = $f3->get('DB')->exec("SELECT distinct list FROM task where user_upd = ?", $current_user['user_id']);
+		
+		$lists_raw = $f3->get('DB')->exec("SELECT distinct list FROM task where user_ins = ? or (group_id = ? and share = ?)", array($current_user['user_id'], $current_user['group_id'], 1));
 		$lists = [];
 		foreach ($lists_raw as $item) {
 			$lists[] = $item['list'];
@@ -17,7 +17,7 @@ class privatepages extends authentication {
 		asort($lists);
 		$f3->set('list', $lists);
 
-		$tags_raw = $f3->get('DB')->exec("SELECT distinct tags FROM task where user_upd = ?", $current_user['user_id']);
+		$tags_raw = $f3->get('DB')->exec("SELECT distinct tags FROM task where user_ins = ? or (group_id = ? and share = ?)", array($current_user['user_id'], $current_user['group_id'], 1));
 		$tags = [];
 		foreach ($tags_raw as $item) {
 			foreach (explode(',', $item['tags']) as $subitem) {
@@ -37,7 +37,7 @@ class privatepages extends authentication {
 	function allview($f3) {
 		$current_user = $f3->get('active_user');
 
-		$results = $f3->get('DB')->exec("SELECT t.*, (select count(1) from time_track tr where tr.task_id=t.id and end_time is null) as open_count FROM task t where t.user_upd = ?", $current_user['user_id']);
+		$results = $f3->get('DB')->exec("SELECT t.*, (select count(1) from time_track tr where tr.task_id=t.id and end_time is null) as open_count FROM task t where t.user_ins = ? or (t.group_id = ? and t.share = ?)", array($current_user['user_id'], $current_user['group_id'], 1));
 
 		$tasks = [];
 		foreach ($results as $result) {
@@ -161,7 +161,13 @@ class privatepages extends authentication {
 		$current_user = $f3->get('active_user');
 
 		$id = $f3->get('POST.id');
-		$task = $f3->get('POST.task');
+		$task = trim($f3->get('POST.task'));
+		
+		if(!empty($f3->get('POST.share'))){
+			$share = 1;
+		}else{
+			$share = 0;
+		}
 
 		if ($task == 'delete') {
 			$f3->get('DB')->exec("DELETE FROM task WHERE id=?", $id);
@@ -182,9 +188,9 @@ class privatepages extends authentication {
 			}
 
 			if ($id == 0) {
-				$f3->get('DB')->exec("INSERT INTO task (name, tags, list, due_date, comp_date, user_ins, time_ins, user_upd, time_upd) VALUES (?,?,?,?,?,?,?,?,?)", array($f3->get('POST.name'), $tags, $f3->get('POST.list'), $f3->get('POST.due-date'), '', $current_user['user_id'], date("Y-m-d H:i:s"), $current_user['user_id'], date("Y-m-d H:i:s")));
+				$f3->get('DB')->exec("INSERT INTO task (name, tags, list, due_date, comp_date, group_id, share, user_ins, time_ins, user_upd, time_upd) VALUES (?,?,?,?,?,?,?,?,?,?,?)", array($f3->get('POST.name'), $tags, $f3->get('POST.list'), $f3->get('POST.due-date'), '', $current_user['group_id'], $share, $current_user['user_id'], date("Y-m-d H:i:s"), $current_user['user_id'], date("Y-m-d H:i:s")));
 			} else {
-				$f3->get('DB')->exec("UPDATE task SET name=?, tags=?, list=?, due_date=?, comp_date=?, user_upd=?, time_upd=? WHERE id=?", array($f3->get('POST.name'), $tags, $f3->get('POST.list'), $f3->get('POST.due-date'), '', $current_user['user_id'], date("Y-m-d H:i:s"), $id));
+				$f3->get('DB')->exec("UPDATE task SET name=?, tags=?, list=?, due_date=?, share=?, user_upd=?, time_upd=? WHERE id=?", array($f3->get('POST.name'), $tags, $f3->get('POST.list'), $f3->get('POST.due-date'), $share, $current_user['user_id'], date("Y-m-d H:i:s"), $id));
 			}
 		} elseif ($task == 'add-file') {
 			$file = $f3->get('FILES.upload');
@@ -262,6 +268,11 @@ class privatepages extends authentication {
 	}
 
 	function supersettings($f3) {
+		$current_user = $f3->get('active_user');
+		
+		if($current_user['superadmin'] != 1){
+			$f3->reroute("/");
+		}
 		$result = $f3->get('DB')->exec("SELECT count(1) as rows FROM user_session WHERE token_expire>=?", date("Y-m-d H:i:s"));
 		$f3->set('active_session', $result[0]['rows']);
 
@@ -272,6 +283,12 @@ class privatepages extends authentication {
 	}
 
 	function supersettingsedit($f3) {
+		$current_user = $f3->get('active_user');
+		
+		if($current_user['superadmin'] != 1){
+			$f3->reroute("/");
+		}
+		
 		$task = $f3->get('POST.task');
 
 		if ($task == 'delete') {

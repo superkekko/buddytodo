@@ -75,6 +75,7 @@
 		document.getElementById('user-user').setAttribute("readonly", "readonly");
 		document.getElementById('user-password').removeAttribute("required", "required");
 		document.getElementById('user-group').setAttribute("value", $(this).data('group'));
+		document.getElementById('user-group').setAttribute("readonly", "readonly");
 		if ($(this).data('superadmin') == 1) {
 			document.getElementById('user-superadmin').setAttribute("checked", "checked");
 		}
@@ -88,6 +89,7 @@
 		document.getElementById('user-password').setAttribute("value", "");
 		document.getElementById('user-password').setAttribute("required", "required");
 		document.getElementById('user-group').setAttribute("value", "");
+		document.getElementById('user-group').removeAttribute("readonly", "readonly");
 		document.getElementById('user-superadmin').removeAttribute("checked", "checked");
 		document.getElementById('edit-user').classList.remove("was-validated");
 	});
@@ -128,12 +130,12 @@
 							<input type="text" name="user-user" id="user-user" class="form-control" placeholder="User ID" value="" required>
 						</div>
 						<div class="col-4">
-							<input type="text" name="user-group" id="user-group" class="form-control" placeholder="Group ID" value="">
+							<input type="text" name="user-group" id="user-group" class="form-control" placeholder="Group ID" value="" required>
 						</div>
 						<div class="col-4">
 							<input type="password" name="user-password" id="user-password" placeholder="New password" value="" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).(?=.*[0-9]).{8,20}" required>
 							<div class="invalid-feedback">
-								Please provide a valid password (must be 8 char minimum, at least 1 uppercase, 1 lowercase and 1 number)
+								Please provide a valid password (must be 8 char minimum, at least 1 uppercase, 1 lowercase, 1 number and 1 special char)
 							</div>
 						</div>
 					</div>

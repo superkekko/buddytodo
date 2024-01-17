@@ -8,11 +8,18 @@
 	<form action="{{ @URI }}" method="post" enctype="application/x-www-form-urlencoded">
 		<label class="form-label">API Token</label>
 		<div class="input-group">
-			<input type="text" id="apitoken" class="form-control" name="token" value="{{@bearer}}" readonly>
+			<input type="text" id="apitoken" class="form-control" name="token" value="{{@active_user['bearer']}}" readonly>
 			<input type="hidden" name="task" id="task" value="token-refresh">
 			<button type="submit" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh"><i class="fa-solid fa-arrows-rotate"></i></button>
 		</div>
 		<div style="text-align: right;" class="text-danger">Caution: If you already have an API token, generating a new one will break all existing integrations!</div>
+	</form>
+</div>
+
+<div class="row mb-2">
+	<form action="{{ @URI }}" method="post" enctype="application/x-www-form-urlencoded">
+		<label class="form-label">Group Id</label>
+		<input type="text" id="groupid" class="form-control" name="groupid" value="{{@active_user['group_id']}}" readonly>
 	</form>
 </div>
 
