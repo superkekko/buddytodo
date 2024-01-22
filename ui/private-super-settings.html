@@ -40,7 +40,7 @@
 	<div class="col-12 d-flex justify-content-end">
 		<button type="button" class="btn btn-tool" data-bs-toggle="modal" data-bs-target="#user-modal-edit"><i class="fa-regular fa-square-plus"></i></button>
 	</div>
-	<check if='{{ @GET.status == "same-userid"}}'>
+	<check if='{{ isset(@same_userid) }}'>
 		<true>
 			<div style="text-align: right;" class="text-danger">User not created: duplicated user_id</div>
 		</true>

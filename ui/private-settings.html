@@ -28,7 +28,7 @@
 		<div class="col-12">
 			<label class="form-label">Change password</label>
 			<div class="mb-3">
-				<input type="password" class="form-control mb-3 <check if='{{ @GET.status == "password-error"}}'><true>is-invalid</true></check>" name="password-old" placeholder="Old password" required>
+				<input type="password" class="form-control mb-3 <check if='{{ isset(@password_error) }}'><true>is-invalid</true></check>" name="password-old" placeholder="Old password" required>
 				<div class="invalid-feedback">
 					Provided password is different from saved one. No chage password was made
 				</div>
@@ -51,7 +51,7 @@
 			</div>
 		</div>
 	</form>
-	<check if='{{ @GET.status == "password-changed"}}'>
+	<check if='{{ isset(@password_changed) }}'>
 		<true>
 			<div style="text-align: right;" class="text-success">Password changed</div>
 		</true>

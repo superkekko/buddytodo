@@ -4,7 +4,7 @@ Buddytodo is a simple personal task/to do list/time traking manager self hosted
 ## Install and upgrade
 ### Requirements
 - apache 2.4 (or Nginx)
-- php 7.4
+- php 8.0
 
 ### Installation
 Copy the files in the folder and give access to public. Default user is superadmin/superadmin

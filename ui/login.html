@@ -52,7 +52,7 @@
 
 		<div class="card shadow-lg">
 			<div class="card-body">
-				<check if="{{ @login_error }}">
+				<check if="{{ isset(@login_error) }}">
 					<true>
 						<div class="alert alert-danger">
 							<i class="icon fas fa-ban"></i> Error during login

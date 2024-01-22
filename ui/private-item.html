@@ -57,7 +57,7 @@
 			<ul class="list list-inline">
 				<repeat group="{{@task}}" value="{{@item}}">
 					<li data-id="{{ @item['id'] }}" class="shadow">
-						<div class="row ml-2 text-truncate">
+						<div class="row ml-2">
 							<h5 class="mb-0">
 								<form id="completeform" action="{{ @URI }}" method="post" enctype="application/x-www-form-urlencoded">
 									<input type="hidden" name="task" value="<check if="{{!empty(@item['comp_date'])}}">
@@ -124,7 +124,9 @@
 										</form>
 									</false>
 								</check>
-								<button type="button" class="btn btn-sm btn-tool" id="edit-data" data-id="{{@item['id']}}" data-name="{{@item['name']}}" data-link="{{@item['link']}}" data-tags="{{@item['tags']}}" data-share="{{@item['share']}}" data-list="{{@item['list']}}" data-date="{{@item['due_date']}}"><i class="fa-solid fa-pen-to-square"></i> Edit</button>&emsp;
+								<form>
+									<button type="button" class="btn btn-sm btn-tool" id="edit-data" data-id="{{@item['id']}}" data-name="{{@item['name']}}" data-tags="{{@item['tags']}}" data-share="{{@item['share']}}" data-list="{{@item['list']}}" data-date="{{@item['due_date']}}"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+								</form>
 								<form action="{{ @URI }}" method="post" enctype="application/x-www-form-urlencoded">
 									<input type="hidden" name="task" value="delete">
 									<input type="hidden" name="id" value="{{@item['id']}}">
