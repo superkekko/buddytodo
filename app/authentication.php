@@ -31,7 +31,7 @@ class authentication extends controller {
 		$user_check = $f3->get('DB')->exec('SELECT * FROM user WHERE user_id=?', $username);
 		$user_check = $user_check[0];
 
-		if (hash_equals($session_csrf, $page_token) && !empty($user_check) && $user_check['user_id'] === $username && $this->encriptDecript($f3, $user_check['password'], 'd') === $password) {
+		if (hash_equals($page_token, $session_csrf) && !empty($user_check) && $user_check['user_id'] === $username && $this->encriptDecript($f3, $user_check['password'], 'd') === $password) {
 			$exipration_date = date('Y-m-d H:i:s', strtotime('+15 day', strtotime(date("Y-m-d H:i:s"))));
 			$f3->get('DB')->exec('INSERT INTO user_session(user_id, token, token_expire) VALUES(?,?,?)', array($username, $session_csrf, $exipration_date));
 			$f3->set('SESSION.username', $username);
