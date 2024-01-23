@@ -84,7 +84,7 @@ class privatepages extends authentication {
 		$current_user = $f3->get('active_user');
 		$id = $f3->get('PARAMS.id');
 
-		$results = $f3->get('DB')->exec("SELECT t.*, (select count(1) from time_track tr where tr.task_id=t.id and end_time is null) as open_count FROM task t where t.user_upd = ? and t.list = ?", array($current_user['user_id'], $id));
+		$results = $f3->get('DB')->exec("SELECT t.*, (select count(1) from time_track tr where tr.task_id=t.id and end_time is null) as open_count FROM task t where (t.user_upd = ?  or (group_id = ? and share = ?)) and t.list = ?", array($current_user['user_id'], $id));
 
 		$tasks = [];
 		foreach ($results as $result) {
@@ -132,7 +132,7 @@ class privatepages extends authentication {
 		$current_user = $f3->get('active_user');
 		$id = $f3->get('PARAMS.id');
 
-		$results = $f3->get('DB')->exec("SELECT t.*, (select count(1) from time_track tr where tr.task_id=t.id and end_time is null) as open_count FROM task t where t.user_upd = ? and (',' || t.tags || ',') LIKE ?", array($current_user['user_id'], '%,'.$id.',%'));
+		$results = $f3->get('DB')->exec("SELECT t.*, (select count(1) from time_track tr where tr.task_id=t.id and end_time is null) as open_count FROM task t where (t.user_upd = ? or (group_id = ? and share = ?)) and (',' || t.tags || ',') LIKE ?", array($current_user['user_id'], '%,'.$id.',%'));
 
 		$tasks = [];
 		foreach ($results as $result) {
