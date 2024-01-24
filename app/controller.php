@@ -76,7 +76,7 @@ class controller {
 				file_put_contents($main_path.'/data/secret.json', json_encode($secret, JSON_INVALID_UTF8_IGNORE));
 			}
 
-			$db->exec("INSERT INTO user (user_id, superadmin, bearer, password) VALUES(?,?,?,?)", array('superadmin', 1, $this->generateRandomString(50), $this->encriptDecript($f3, 'superadmin')));
+			$db->exec("INSERT INTO user (user_id, group_id, superadmin, bearer, password) VALUES(?,?,?,?)", array('superadmin', 'superadmin', 1, $this->generateRandomString(50), $this->encriptDecript($f3, 'superadmin')));
 
 			file_put_contents($main_path.'/data/db_version', '1.0.1', LOCK_EX);
 		}
