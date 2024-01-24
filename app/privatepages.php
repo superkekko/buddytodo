@@ -13,7 +13,7 @@ class privatepages extends authentication {
 		foreach ($lists_raw as $item) {
 			$lists[] = $item['list'];
 		}
-		$tags = array_unique($lists);
+		$lists = array_unique($lists);
 		asort($lists);
 		$f3->set('list', $lists);
 
