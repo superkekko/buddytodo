@@ -1,6 +1,6 @@
 <div id="list">
 	<div class="container">
-		<div class="row">
+		<div class="row" id="insert-edit-form" style="display: none">
 			<form action="{{ @URI }}" method="post" enctype="application/x-www-form-urlencoded">
 				<div class="row mb-2">
 					<div class="col-12">
@@ -39,6 +39,9 @@
 					<button type="button" class="btn btn-sm btn-tool" id="edit-clear"><i class="fa-solid fa-broom"></i> Clear</button>
 				</div>
 			</form>
+		</div>
+		<div class="row">
+			<button type="button" class="btn btn-sm btn-tool" id="insert-edit-button"><i id="insert-edit-icon" class="fa-solid fa-chevron-down"></i></button>
 		</div>
 		<div class="row">
 			<div class="col-md-12 d-flex justify-content-end">
@@ -141,6 +144,25 @@
 	</div>
 	<ul class="pagination d-flex justify-content-center"></ul>
 </div>
+
+<script>
+	tippy('#insert-edit-button', {
+      content: "Show and hide insert/edit form",
+    });
+    
+	$(document).on("click", "#insert-edit-button", function() {
+		var x = document.getElementById("insert-edit-form");
+		if (x.style.display === "none") {
+			x.style.display = "block";
+			$("#insert-edit-icon").removeClass("fa-chevron-down");
+			$("#insert-edit-icon").addClass("fa-chevron-up");
+		} else {
+			x.style.display = "none";
+			$("#insert-edit-icon").removeClass("fa-chevron-up");
+			$("#insert-edit-icon").addClass("fa-chevron-down");
+		}	
+	});
+</script>
 
 <script>
 	$(document).on("click", "#ckeck-complete", function() {
