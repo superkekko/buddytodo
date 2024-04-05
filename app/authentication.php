@@ -26,8 +26,6 @@ class authentication extends controller {
 
 		$session_csrf = $f3->get('SESSION.token');
 
-		$userok = false;
-
 		$user_check = $f3->get('DB')->exec('SELECT * FROM user WHERE user_id=?', $username);
 		$user_check = $user_check[0];
 
