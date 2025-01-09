@@ -13,7 +13,13 @@ class controller {
 		$f3->set('LOCALES', $main_path.'/dict/');
 		$f3->set('FALLBACK', 'en');
 
-		$f3->set('siteurl', $this->siteURL());
+		$site = $f3->get('site');
+		if (!empty($site['port'])) {
+			$f3->set('PORT', $site['port']);
+		}
+		
+		$site_url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
+		$f3->set('site_url', $site_url);
 
 		//check if DB is empty and create structure
 		//check previus DB presence
@@ -119,14 +125,6 @@ class controller {
 		$log = new Log('error.log');
 		$log->write($f3->get('ERROR.code').' - '.$f3->get('ERROR.text'));
 		echo Template::instance()->render('service.html');
-	}
-
-	function siteURL() {
-		return sprintf(
-			"%s://%s",
-			isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-			$_SERVER['SERVER_NAME']
-		);
 	}
 
 	function encriptDecript($f3, $string, $action = 'e') {

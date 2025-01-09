@@ -3,7 +3,7 @@ class authentication extends controller {
 
 	function loginpage($f3) {
 		//create new session with 15gg live cookie, rootpath, server, secure, httponly and samesite strict
-		session_set_cookie_params(1296000, '/', $_SERVER['HTTP_HOST'], true, true);
+		session_set_cookie_params(1296000, '/', $_SERVER['SERVER_NAME'], true, true);
 		ini_set('session.cookie_samesite', 'Lax');
 		$token = bin2hex(random_bytes(32));
 		if (empty($f3->get('SESSION.token'))) {
@@ -28,6 +28,24 @@ class authentication extends controller {
 
 		$user_check = $f3->get('DB')->exec('SELECT * FROM user WHERE user_id=?', $username);
 		$user_check = $user_check[0];
+		
+		//se non ci sono i token riporto alla loginpage
+		if (empty($page_token) || empty($session_csrf)) {
+			$f3->set('token_error', true);
+			$f3->clear('SESSION');
+			$f3->clear('COOKIE');
+			$this->loginpage($f3);
+			exit;
+		}
+		
+		//se non c'è l'utente riporto alla loginpage
+		if (empty($user_check)) {
+			$f3->set('user_error', true);
+			$f3->clear('SESSION');
+			$f3->clear('COOKIE');
+			$this->loginpage($f3);
+			exit;
+		}
 
 		if (hash_equals($page_token, $session_csrf) && !empty($user_check) && $user_check['user_id'] === $username && $this->encriptDecript($f3, $user_check['password'], 'd') === $password) {
 			$exipration_date = date('Y-m-d H:i:s', strtotime('+15 day', strtotime(date("Y-m-d H:i:s"))));
@@ -41,7 +59,7 @@ class authentication extends controller {
 				if ($url_parsed['path'] == '/login' || $url_parsed['path'] == '/logout' || $url_parsed['path'] == '/read') {
 					$f3->reroute('/');
 				} else {
-					$f3->reroute($requestpage);
+					$f3->reroute('.'.$url_parsed['path']);
 				}
 			} else {
 				$f3->reroute('/');

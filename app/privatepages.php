@@ -30,7 +30,6 @@ class privatepages extends authentication {
 	}
 
 	function afterroute($f3) {
-		$f3->set('site_url', $this->siteURL());
 		echo Template::instance()->render('private-layout.html');
 	}
 
